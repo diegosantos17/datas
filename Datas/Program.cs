@@ -10,7 +10,7 @@ namespace Datas
         {
             var startDate = new DateTime(2019, 1, 1);
             var endDate = new DateTime(2019, 1, 31); ;
-            var period = "quinzenal"; //"quinzenal, mensal, semestral";
+            var period = "semanal"; //"quinzenal, mensal, semestral";
 
             var breakDates = 7;
 
@@ -40,10 +40,11 @@ namespace Datas
             weekDays[6] = false; // Saturday
 
             List<DateTime> listDates = new List<DateTime>();
-            List<int> daysSelected = new List<int>();
+            List<int> daysSelected = new List<int>();            
             List<DateTime> lockedtDates = new List<DateTime>();
 
-            // lockedtDates.Add(new DateTime(2019, 1, 1));
+            lockedtDates.Add(new DateTime(2019, 1, 1));
+            lockedtDates.Add(new DateTime(2019, 1, 15));
 
             DateTime date = startDate;            
             DateTime startRecurrancy = startDate;            
@@ -56,7 +57,6 @@ namespace Datas
                     daysSelected.Add(day);
                 }
             }
-
 
             // Obtendo o primeiro dia válido para inicio dos agendamentos
             for (int day = 0; day < 7; day++)
@@ -80,7 +80,7 @@ namespace Datas
                     {
                         if(!lockedtDates.Any(w => w == date))
                         {
-                            if (date < endDate)
+                            if (date <= endDate)
                             {
                                 listDates.Add(date);
                             }
