@@ -10,7 +10,7 @@ namespace Datas
         {
             var startDate = new DateTime(2019, 1, 1);
             var endDate = new DateTime(2019, 1, 31); ;
-            var period = "semanal"; //"quinzenal, mensal, semestral";
+            var period = "quinzenal"; //"quinzenal, mensal, semestral";
 
             var breakDates = 7;
 
@@ -43,7 +43,7 @@ namespace Datas
             List<int> daysSelected = new List<int>();
             List<DateTime> lockedtDates = new List<DateTime>();
 
-            lockedtDates.Add(new DateTime(2019, 1, 1));
+            // lockedtDates.Add(new DateTime(2019, 1, 1));
 
             DateTime date = startDate;            
             DateTime startRecurrancy = startDate;            
@@ -72,14 +72,19 @@ namespace Datas
             }
 
             // Selecionando os dias dias respeitando a recorrência informada
-            while (date <= endDate)
+            while (startRecurrancy <= endDate)
             {
                 while (countMaths < daysSelected.Count())
                 {
-                    if (daysSelected.Any(w => w.Equals((int)date.DayOfWeek)) &&
-                        !lockedtDates.Any(w => w == date))
+                    if (daysSelected.Any(w => w.Equals((int)date.DayOfWeek)))                        
                     {
-                        listDates.Add(date);
+                        if(!lockedtDates.Any(w => w == date))
+                        {
+                            if (date < endDate)
+                            {
+                                listDates.Add(date);
+                            }
+                        }
                         countMaths++;
                     }
 
@@ -87,6 +92,7 @@ namespace Datas
                 }
 
                 startRecurrancy = startRecurrancy.AddDays(breakDates);
+                date = startRecurrancy;
                 countMaths = 0;
             }
 
