@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Datas
 {
@@ -7,9 +8,28 @@ namespace Datas
     {
         static void Main(string[] args)
         {
-
             var startDate = new DateTime(2019, 1, 1);
             var endDate = new DateTime(2019, 1, 31); ;
+            var period = "semanal"; //"quinzenal, mensal, semestral";
+
+            var breakDates = 7;
+
+            switch (period)
+            {
+                case "quinzenal":
+                    breakDates = 15;
+                    break;
+                case "mensal":
+                    breakDates = 30;
+                    break;
+                case "semestral":
+                    breakDates = 180;
+                    break;
+                default:
+                    breakDates = 7;
+                    break;
+            }
+
 
             var weekDays = new bool[7];
             weekDays[0] = false; // Sunday
@@ -21,23 +41,49 @@ namespace Datas
             weekDays[6] = false; // Saturday
 
             List<DateTime> listDates = new List<DateTime>();
-            var totalDays = endDate.Subtract(startDate).TotalDays;
-            DateTime date = startDate;
+            DateTime date = startDate;            
+            DateTime startRecurrancy = startDate;
+            List<int> daysSelected = new List<int>();
+            var countMaths = 0;
 
-            while (date <= endDate)
-            {                               
-                date = date.AddDays(1);
+            // Obtendo os dias selecionados
+            for (int day = 0; day < 7; day++)
+            {
+                if (weekDays[day]) {
+                    daysSelected.Add(day);
+                }
+            }
 
-                for (int day = 0; day < 7; day++)
+
+            // Obtendo o primeiro dia válido para inicio dos agendamentos
+            for (int day = 0; day < 7; day++)
+            {
+                if (weekDays[day])
                 {
-                    if (weekDays[day])
+                    if ((int)startDate.DayOfWeek == day)
                     {
-                        if((int)date.DayOfWeek == day)
-                        {
-                            listDates.Add(date);
-                        }
+                        date = startDate;
+                        startRecurrancy = startDate;
                     }
                 }
+            }
+
+            // Selecionando os dias dias respeitando a recorrência informada
+            while (date <= endDate)
+            {
+                while (countMaths < daysSelected.Count())
+                {
+                    if (daysSelected.Any(w => w.Equals((int)date.DayOfWeek)))
+                    {
+                        listDates.Add(date);
+                        countMaths++;
+                    }
+
+                    date = date.AddDays(1);
+                }
+
+                startRecurrancy = startRecurrancy.AddDays(breakDates);
+                countMaths = 0;
             }
 
 
@@ -46,18 +92,7 @@ namespace Datas
                 Console.WriteLine(day);
             }
 
-            Console.ReadKey();
-            
-
-            //
-
-
-
-
-
-
-            // Desbrindo qual a próxima data
-
+            Console.ReadKey();           
         }
     }
 }
