@@ -30,7 +30,6 @@ namespace Datas
                     break;
             }
 
-
             var weekDays = new bool[7];
             weekDays[0] = false; // Sunday
             weekDays[1] = false; // Monday
@@ -41,9 +40,13 @@ namespace Datas
             weekDays[6] = false; // Saturday
 
             List<DateTime> listDates = new List<DateTime>();
-            DateTime date = startDate;            
-            DateTime startRecurrancy = startDate;
             List<int> daysSelected = new List<int>();
+            List<DateTime> lockedtDates = new List<DateTime>();
+
+            lockedtDates.Add(new DateTime(2019, 1, 1));
+
+            DateTime date = startDate;            
+            DateTime startRecurrancy = startDate;            
             var countMaths = 0;
 
             // Obtendo os dias selecionados
@@ -73,7 +76,8 @@ namespace Datas
             {
                 while (countMaths < daysSelected.Count())
                 {
-                    if (daysSelected.Any(w => w.Equals((int)date.DayOfWeek)))
+                    if (daysSelected.Any(w => w.Equals((int)date.DayOfWeek)) &&
+                        !lockedtDates.Any(w => w == date))
                     {
                         listDates.Add(date);
                         countMaths++;
